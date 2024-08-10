@@ -1,0 +1,18 @@
+{
+  "name": "chatbot",
+  "version": "1.0.0",
+  "description": "Chatbot powered by ChatGPT",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Tyson Thurman",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.55.3",
+    "readline-sync": "^1.4.10"
+  }
+}
