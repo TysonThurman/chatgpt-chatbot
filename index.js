@@ -3,13 +3,19 @@ import readlineSync from 'readline-sync';
 import colors from 'colors';
 
 async function main(){
-    console.log(colors.green.bold("Welcome to the Chat Bot!"));
-    console.log(colors.bold.green("You can start chatting with the bot"));
+    console.log(colors.green.bold("Welcome to the Chat Bot!\n"));
 
-    const chatHistory = []; //store conversation history
+    const firstName = readlineSync.question(colors.bold.red("Can we please start with your first name?: "));
+    console.log(" ");
+    console.log(`Welcome to the Chat ${firstName}! You can now begin the conversation.\n`);
+
+    const chatHistory = []; //store conversation history here until we move to a database.
+
+    //create a database to store chatHistory:
+
 
     while(true){
-        const userInput = readlineSync.question(colors.yellow('You: '));
+        const userInput = readlineSync.question(colors.yellow(`${firstName}: `));
 
         try {
             //construct messages by iterating over the chat history
@@ -27,7 +33,7 @@ async function main(){
             //Get completion text/content
             const completionText = completion.choices[0].message.content;
 
-            if(userInput.toLowerCase() === 'exit'){
+            if(userInput.toLowerCase() === 'exit' | 'bye' | 'quit'){
                 console.log(colors.green(`Bot:`) + completionText);
                 return;
                 //break;
