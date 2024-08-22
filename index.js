@@ -32,7 +32,7 @@ async function main(){
     console.log(colors.green.bold("Welcome to the Chat Bot!\n"));
 
     const firstName = readlineSync.question(colors.bold.red("Can we please start with your first name?: "));
-    console.log(`\nWelcome to the Chat ${firstName}! You can now begin the conversation.\n`);
+    console.log(`\nWelcome to the Chat ${firstName}! You can now begin the conversation. Type 'exit' to quit at any time.\n`);
 
     const chatHistory = []; //store conversation history here until we move to the database.
 
@@ -55,7 +55,7 @@ async function main(){
             //Get completion text/content
             const completionText = completion.choices[0].message.content;
 
-            if(userInput.toLowerCase() === 'exit' || 'bye' || 'quit'){
+            if(userInput.toLowerCase() === 'exit'){
                 console.log(colors.green(`Bot:`) + completionText);
                 return;
             }
@@ -73,6 +73,5 @@ async function main(){
 
     }
 }
-
 main();
 // main().catch(console.error);
