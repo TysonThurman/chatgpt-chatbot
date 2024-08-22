@@ -1,18 +1,40 @@
 import openai from "./config/open-ai.js";
 import readlineSync from 'readline-sync';
 import colors from 'colors';
+import {MongoClient} from 'mongodb';
+import dotenv from 'dotenv'
+dotenv.config();
 
 async function main(){
+    const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PW}@${process.env.DB_HOST}:${process.env.DB_PORT}/?authSource=admin`;
+    const client = new MongoClient(uri);
+
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB!");
+
+        const database = client.db('chatbot');
+        const collection = database.collection('chathistory');
+
+        const cursor = collection.find({});
+
+        await cursor.forEach(chat => {
+            console.log(chat);
+        });
+        
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await client.close();
+        console.log("Disconnected from MongoDB!");
+    }
+    
     console.log(colors.green.bold("Welcome to the Chat Bot!\n"));
 
     const firstName = readlineSync.question(colors.bold.red("Can we please start with your first name?: "));
-    console.log(" ");
-    console.log(`Welcome to the Chat ${firstName}! You can now begin the conversation.\n`);
+    console.log(`\nWelcome to the Chat ${firstName}! You can now begin the conversation.\n`);
 
-    const chatHistory = []; //store conversation history here until we move to a database.
-
-    //create a database to store chatHistory:
-
+    const chatHistory = []; //store conversation history here until we move to the database.
 
     while(true){
         const userInput = readlineSync.question(colors.yellow(`${firstName}: `));
@@ -33,10 +55,9 @@ async function main(){
             //Get completion text/content
             const completionText = completion.choices[0].message.content;
 
-            if(userInput.toLowerCase() === 'exit' | 'bye' | 'quit'){
+            if(userInput.toLowerCase() === 'exit' || 'bye' || 'quit'){
                 console.log(colors.green(`Bot:`) + completionText);
                 return;
-                //break;
             }
 
             console.log(colors.green(`Bot:`) + completionText);
@@ -54,3 +75,4 @@ async function main(){
 }
 
 main();
+// main().catch(console.error);
